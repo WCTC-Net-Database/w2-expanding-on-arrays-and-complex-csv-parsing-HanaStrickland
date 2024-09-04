@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 
 class Program
 {
@@ -54,25 +55,45 @@ class Program
             if (line.StartsWith("\""))
             {
                 // TODO: Find the closing quote and the comma right after it
+                
+                commaIndex = line.IndexOf(',');
+                name = line.Substring(0, commaIndex);
+                int pos = name.Length + 1;
+
+                var line2 = line.Substring(pos);
+
+                int commaIndex2 = line2.IndexOf(',');
+
+                int nameEndsIndex = pos + commaIndex2;
+
                 // TODO: Remove quotes from the name if present and parse the name
                 // name = ...
+                name = line.Substring(0,nameEndsIndex);
+                line = line.Substring(nameEndsIndex);
+                name = name.Replace("\"","");
             }
             else
             {
                 // TODO: Name is not quoted, so store the name up to the first comma
-                // name =
+                commaIndex = line.IndexOf(',');
+                name = line.Substring(0,commaIndex);
+                line = line.Substring(commaIndex);
             }
 
             // TODO: Parse characterClass, level, hitPoints, and equipment
-            // string characterClass = ...
-            // int level = ...
-            // int hitPoints = ...
 
+            string[] otherFields = line.Split(','); 
+               
+            var heroClass = otherFields[1];
+            var heroLevel = otherFields[2];
+            var hitPoints = otherFields[3];
+            
             // TODO: Parse equipment noting that it contains multiple items separated by '|'
-            // string[] equipment = ...
+            var heroEquipmentString = otherFields[4];                
+            string[] heroEquipmentArray = heroEquipmentString.Split('|');
 
             // Display character information
-            // Console.WriteLine($"Name: {name}, Class: {characterClass}, Level: {level}, HP: {hitPoints}, Equipment: {string.Join(", ", equipment)}");
+            Console.WriteLine($"Name: {name}; Class: {heroClass}; Level: {heroLevel}; HP: {hitPoints}; Equipment: {string.Join(", ", heroEquipmentArray)}");
         }
     }
 
