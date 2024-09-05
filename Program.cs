@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Globalization;
 
 class Program
 {
@@ -100,9 +101,48 @@ class Program
     static void AddCharacter(ref string[] lines)
     {
         // TODO: Implement logic to add a new character
+        
         // Prompt for character details (name, class, level, hit points, equipment)
         // DO NOT just ask the user to enter a new line of CSV data or enter the pipe-separated equipment string
+        Console.Write("Enter the name for your new character: ");
+        string newCharacter = Console.ReadLine();
+        Console.Write($"Enter your character's class: ");
+        string newClass = Console.ReadLine();
+        Console.WriteLine("Select 3 tools from the menu below: ");
+
+        string[] equipmentOptions = {"Armor","Book","Cloak","Dagger","Horse","Lockpick","Mace","Potion","Robe","Shield","Staff","Sword"};
+        int countEquipChoicesLeft = 3;
+        List<string> choicesList = new List<string>();
+
+        while (countEquipChoicesLeft > 0)
+        {
+            
+            Console.Write("1. Armor\n2. Book\n3. Cloak\n4. Dagger\n5. Horse\n6. Lockpick\n7. Mace\n8. Potion\n9. Robe\n10. Shield\n11. Staff\n12. Sword\n");
+
+            int choice = Convert.ToInt16(Console.ReadLine());
+            int mappedToIndexChoice = choice - 1;
+            string choiceName = equipmentOptions[mappedToIndexChoice];
+
+            choicesList.Add(choiceName);
+
+            countEquipChoicesLeft -= 1;
+        }
+
+        string[] choicesArray = choicesList.ToArray();
+        string choicesString = string.Join(", ", choicesArray);
+
+        Console.WriteLine($"You've chosen the following equipment: {choicesString}");
+        
         // Append the new character to the lines array
+        if (newCharacter.Contains(","))
+        {
+            newCharacter = $"\"{newCharacter}\"";
+        }
+
+        string pipeDelimitedChoicesString = string.Join("|", choicesArray);
+        string lineToAppend = $"{newCharacter},{newClass},{1},{10},{pipeDelimitedChoicesString}"; // automatically level 1 and 10 hit points
+        Console.WriteLine(lineToAppend);
+        lines = lines.Append(lineToAppend).ToArray();
     }
 
     static void LevelUpCharacter(string[] lines)
