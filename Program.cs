@@ -161,15 +161,55 @@ class Program
             {
 
                 // TODO: Split the rest of the fields locating the level field
-                // string[] fields = ...
-                // int level = ...
+                string[] fields = line.Split(",");
+
+                string heroClass = fields[^4];
+                int level = Convert.ToInt16(fields[^3]);
+                int hitPoints = Convert.ToInt16(fields[^2]);
+                string equipment = fields[^1];
+
+                string name;
+                int commaIndex;
+
+                if (line.StartsWith("\""))
+                {
+                    // TODO: Find the closing quote and the comma right after it
+                    
+                    commaIndex = line.IndexOf(',');
+                    name = line.Substring(0, commaIndex);
+                    int pos = name.Length + 1;
+
+                    var line2 = line.Substring(pos);
+
+                    int commaIndex2 = line2.IndexOf(',');
+
+                    int nameEndsIndex = pos + commaIndex2;
+
+                    // TODO: Remove quotes from the name if present and parse the name
+                    // name = ...
+                    name = line.Substring(0,nameEndsIndex);
+                    line = line.Substring(nameEndsIndex);
+                    name = name.Replace("\"","");
+                }
+                else
+                {
+                    // TODO: Name is not quoted, so store the name up to the first comma
+                    commaIndex = line.IndexOf(',');
+                    name = line.Substring(0,commaIndex);
+                    line = line.Substring(commaIndex);
+                }
 
                 // TODO: Level up the character
-                // level++;
-                // Console.WriteLine($"Character {name} leveled up to level {level}!");
+                level++;
+                Console.WriteLine($"Character {name} leveled up to level {level}!");
 
                 // TODO: Update the line with the new level
-                // lines[i] = ...
+                if (name.Contains(","))
+                {
+                    name = $"\"{name}\"";
+                }
+                lines[i] = $"{name},{heroClass},{level},{hitPoints},{equipment}";
+
                 break;
             }
         }
